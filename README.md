@@ -58,6 +58,7 @@ Using the song and log datasets, I will create a star schema optimized for queri
 
 - `dl.cfg` is a configuration file, which you need to complete with your AWS keys and data paths.
 - `etl_test.ipynb` tests the ETL following the procedure step by step.
+- `sparkify.ipynb` investigates data of the full `s3://udacity-dend/` dataset on the standalone Spark cluster.
 - `etl.py` loads data from S3, process the data into analytics tables using Spark, and load them back into S3.
 - `README.md` provides the project description you are now reading.
 
@@ -75,6 +76,7 @@ Through the implementation of this project, while solving the project's core tas
 1) Data modeling for Spark.
 1) Reading from S3 into Spark and writing back to S3. The writing part was feeling like the bottleneck of my ETL process so I used `.limit(5)` on my data frames when testing.
 1) ETL on Spark with data wrangling, extraction and type conversions.
+1) Data investigation with Spark queries.
 
 ## Author
 
