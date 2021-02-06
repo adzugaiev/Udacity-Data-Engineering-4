@@ -56,16 +56,17 @@ Using the song and log datasets, I will create a star schema optimized for queri
 
 ## Files in the Project
 
-- `dl.cfg` is a configuration file, which you need to complete with your AWS keys and data paths.
+- `dl.cfg` is a configuration file with data paths.
 - `etl_test.ipynb` tests the ETL following the procedure step by step.
 - `etl.py` loads data from S3, process the data into analytics tables using Spark, and load them back into S3.
-- `README.md` provides the project description you are now reading.
 - `sparkify.ipynb` investigates data of the full `s3://udacity-dend/` dataset on the standalone Spark cluster.
 - `cfg_test.ipynb` tests reading the configuration file on Spark from S3.
+- `run_etl_py.ipynb` tests running `etl.py` on the standalone Spark cluster.
+- `README.md` provides the project description you are now reading.
 
 ## Running the Project
 
-1) Open `dl.cfg` and fill in your AWS keys and your data input and output paths.
+1) Open `dl.cfg` and set your output data path in `data_output`.
 1) You can either run `etl.py` to create and populate the data lake, or
 1) Run `etl_test.ipynb` to test the ETL procedure step by step.
 1) Optionally, run `sparkify.ipynb` to investigate the full dataset with Spark queries.
@@ -77,6 +78,7 @@ Through the implementation of this project, while solving the project's core tas
 1) Setting up and accessing the Spark cluster on AWS EMR.
 1) Data modeling for Spark.
 1) Reading from S3 into Spark and writing back to S3. The writing part was feeling like the bottleneck of my ETL process so I used `.limit(5)` on my data frames when testing.
+1) Removing the previous data from S3.
 1) ETL on Spark with data wrangling, extraction, deduplication, repartition and type conversions.
 1) Data investigation with Spark queries in `sparkify.ipynb`.
 1) Reading the configuration file on Spark from S3, see `cfg_test.ipynb`.
