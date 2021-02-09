@@ -91,7 +91,8 @@ def process_log_data(spark, data_log, data_output, key, write_limit = 5):
     '''
     print(f'Reading log data from: {data_log}')
     
-    df = spark.read.json(data_log).where("page = 'NextSong'")
+    to_timestamp = udf(lambda x : dt.utcfromtimestamp(x / 1e3), TimestampType())    
+    df = spark.read.json(data_log).where("page = 'NextSong'").withColumn('start_time', to_timestamp('ts'))
     df.cache()
     print(f"'NextSong' events count: {df.count()}")
     
@@ -113,9 +114,6 @@ def process_log_data(spark, data_log, data_output, key, write_limit = 5):
         users_table.write.parquet(users_path)
     
     print('Time table ingesting.')
-
-    to_timestamp = udf(lambda x : dt.utcfromtimestamp(x / 1e3), TimestampType())
-    df = df.withColumn('start_time', to_timestamp('ts'))
 
     time_table = df.select('start_time').dropDuplicates() \
         .withColumn('hour', hour('start_time')) \
@@ -187,11 +185,11 @@ def remove_old_data(bucket, key):
     '''
     print('Removing the previous output data from the bucket.')
     obj_removed = 0
-    for obj in list(bucket.objects.filter(Prefix = 'output/songs/')) \
-             + list(bucket.objects.filter(Prefix = 'output/artists/')) \
-             + list(bucket.objects.filter(Prefix = 'output/users/')) \
-             + list(bucket.objects.filter(Prefix = 'output/time/')) \
-             + list(bucket.objects.filter(Prefix = 'output/songplays/')):
+    for obj in list(bucket.objects.filter(Prefix = key['songs'])) \
+             + list(bucket.objects.filter(Prefix = key['artists'])) \
+             + list(bucket.objects.filter(Prefix = key['users'])) \
+             + list(bucket.objects.filter(Prefix = key['time'])) \
+             + list(bucket.objects.filter(Prefix = key['songplays'])):
         _ = obj.delete()
         obj_removed += 1
     print(f'Removed {obj_removed} files.')
